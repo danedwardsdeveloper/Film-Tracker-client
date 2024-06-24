@@ -4,14 +4,15 @@
 	import FilmList from './components/FilmList.svelte';
 	import type { Film } from '../types';
 
-	const VITE_serverURI = `http://localhost:5001/films/`;
+	// const serverURI = `http://localhost:5001/films/`;
+	const VITE_SERVER_URI = import.meta.env.VITE_SERVER_URI;
 
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 
 	const fetchFilms = async () => {
 		try {
-			const response = await axios.get(VITE_serverURI);
+			const response = await axios.get(VITE_SERVER_URI);
 			films = response.data;
 			calculateFilmsSeen();
 		} catch (error) {
