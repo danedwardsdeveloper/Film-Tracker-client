@@ -4,15 +4,14 @@
 	import FilmList from './components/FilmList.svelte';
 	import type { Film } from '../types';
 
-	// const serverURI = `http://localhost:5001/films/`;
-	const VITE_SERVER_URI = import.meta.env.VITE_SERVER_URI;
-
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 
 	const fetchFilms = async () => {
 		try {
-			const response = await axios.get(VITE_SERVER_URI);
+			const response = await axios.get(
+				`https://metacritic-top-100-api.netlify.app/`
+			);
 			films = response.data;
 			calculateFilmsSeen();
 		} catch (error) {
