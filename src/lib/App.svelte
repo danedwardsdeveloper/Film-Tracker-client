@@ -10,7 +10,7 @@
 	const fetchFilms = async () => {
 		try {
 			const response = await axios.get(
-				`https://metacritic-top-100-api.netlify.app/`
+				`https://metacritic-top-100-api.netlify.app/films/`
 			);
 			films = response.data;
 			calculateFilmsSeen();
@@ -30,7 +30,7 @@
 	const toggleSeen = async (id: string) => {
 		try {
 			const response = await axios.post(
-				`http://localhost:5001/films/${id}/toggle`
+				`https://metacritic-top-100-api.netlify.app/films//films/${id}/toggle`
 			);
 			films = films.map((film) => (film._id === id ? response.data : film));
 			calculateFilmsSeen();
