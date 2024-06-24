@@ -10,7 +10,7 @@
 	const fetchFilms = async () => {
 		try {
 			const response = await axios.get(
-				`https://metacritic-top-100-api.netlify.app/films/`
+				`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
 			);
 			films = response.data;
 			calculateFilmsSeen();
