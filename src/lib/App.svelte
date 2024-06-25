@@ -12,37 +12,33 @@
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 	let loading: boolean = true;
-	let error: string | null = null;
+	let error: string | null = 'Error message!';
 
 	const calculateFilmsSeen = () => {
 		filmsSeen = films.filter((film) => film.seen).length;
 	};
 
-	console.log(import.meta.env.VITE_DEV);
-
 	const fetchFilms = async () => {
 		try {
 			if (import.meta.env.VITE_DEV === 'false') {
-				console.log(
-					`Client in production mode\n
-				API enabled`
-				);
+				console.log(`Client in production mode. API enabled`);
 				const response = await axios.get(
 					`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
 				);
 				films = response.data;
 				calculateFilmsSeen();
 			} else {
-				console.log(
-					`Client in development mode\n
-				API bypassed`
-				);
-				await new Promise((resolve) => setTimeout(resolve, 5000));
-				films = filmsData;
+				console.log(`Client in development mode. API bypassed`);
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+				throw new Error('Simulated error for testing');
+				// films = filmsData;
 				calculateFilmsSeen();
 			}
 		} catch (error) {
-			console.error('Error fetching films:', error);
+			console.error(
+				'Error fetching films:',
+				error?.message || 'Failed to load films.'
+			);
 		} finally {
 			loading = false;
 		}
@@ -77,7 +73,9 @@
 </header>
 
 <main class="flex flex-wrap justify-center mt-10 gap-4">
-	{#if loading}
+	{#if error}
+		<p class="text-red-600">{error}</p>
+	{:else if loading}
 		{#each skeletonArray as _}
 			<Skeleton />
 		{/each}
@@ -85,6 +83,3 @@
 		<FilmList {films} {toggleSeen} />
 	{/if}
 </main>
-
-<style>
-</style>
