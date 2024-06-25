@@ -5,34 +5,43 @@
 	import filmsData from './films.js';
 
 	import FilmList from './components/FilmList.svelte';
-	import type { Film } from '../types';
+	import Skeleton from './components/skeleton.svelte';
+
+	import type { Film, ImportMetaEnv } from '../types';
 
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
+	let loading: boolean = true;
 
 	const calculateFilmsSeen = () => {
 		filmsSeen = films.filter((film) => film.seen).length;
 	};
 
 	const fetchFilms = async () => {
-		if (!import.meta.env.DEV) {
-			console.log(
-				`Client in production mode\n
+		try {
+			if (!import.meta.env.DEV) {
+				console.log(
+					`Client in production mode\n
 				API enabled`
-			);
-			const response = await axios.get(
-				`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
-			);
-			films = response.data;
-			calculateFilmsSeen();
-		} else {
-			console.log(
-				`Client in development mode\n
+				);
+				const response = await axios.get(
+					`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
+				);
+				films = response.data;
+				calculateFilmsSeen();
+			} else {
+				console.log(
+					`Client in development mode\n
 				API bypassed`
-			);
-			await new Promise((resolve) => setTimeout(resolve, 5000));
-			films = filmsData;
-			calculateFilmsSeen();
+				);
+				await new Promise((resolve) => setTimeout(resolve, 5000));
+				films = filmsData;
+				calculateFilmsSeen();
+			}
+		} catch (error) {
+			console.error('Error fetching films:', error);
+		} finally {
+			loading = false;
 		}
 	};
 
@@ -51,6 +60,8 @@
 			console.error('Error toggling seen status:', error);
 		}
 	};
+
+	let skeletonArray = Array.from({ length: 100 });
 </script>
 
 <!-- <main class="bg-gradient-to-bl from-blue-100 to-pink-100"> -->
@@ -60,8 +71,16 @@
 		>Films seen: {filmsSeen} / 100</span
 	>
 </p>
-<p>{import.meta.env.VITE_MESSAGE}</p>
-<FilmList {films} {toggleSeen} />
+
+<div class="flex flex-wrap justify-center mt-10 gap-4">
+	{#if loading}
+		{#each skeletonArray as _}
+			<Skeleton />
+		{/each}
+	{:else}
+		<FilmList {films} {toggleSeen} />
+	{/if}
+</div>
 
 <!-- </main> -->
 

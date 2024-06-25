@@ -9,24 +9,22 @@
 	};
 </script>
 
-<div class="flex flex-wrap justify-center mt-10 gap-0">
-	{#each films as film}
-		<button
-			on:click={() => handleToggle(film._id)}
-			class="card transition ease-in-out
+{#each films as film}
+	<button
+		on:click={() => handleToggle(film._id)}
+		class="card transition ease-in-out
 			{film.seen ? 'bg-green-100' : 'bg-slate-100'}"
-		>
-			<h2 class="font-bold text-xl">
-				{film.title}, {film.year}
-				<span class="text-3xl">{film.seen ? '✅' : '🔲'}</span>
-			</h2>
-			<h3 class="pb-4">
-				Rank: {film.rank} <span class="text-gray-400"> |</span> Metascore: {film.metascore}
-			</h3>
-			<p class="text-base text-justify">{film.description}</p>
-		</button>
-	{/each}
-</div>
+	>
+		<h2 class="font-bold text-xl">
+			{film.title}, {film.year}
+			<span class="text-3xl">{film.seen ? '✅' : '🔲'}</span>
+		</h2>
+		<h3 class="pb-4">
+			Rank: {film.rank} <span class="text-gray-400"> |</span> Metascore: {film.metascore}
+		</h3>
+		<p class="text-base text-justify">{film.description}</p>
+	</button>
+{/each}
 
 <style>
 	.card {
