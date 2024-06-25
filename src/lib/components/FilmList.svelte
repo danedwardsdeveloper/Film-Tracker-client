@@ -9,7 +9,7 @@
 	};
 </script>
 
-<div class="flex flex-wrap justify-center mt-10 gap-4">
+<div class="flex flex-wrap justify-center mt-10 gap-0">
 	{#each films as film}
 		<button
 			on:click={() => handleToggle(film._id)}
@@ -23,7 +23,7 @@
 			<h3 class="pb-4">
 				Rank: {film.rank} <span class="text-gray-400"> |</span> Metascore: {film.metascore}
 			</h3>
-			<p class="text-justify">{film.description}</p>
+			<p class="text-base text-justify">{film.description}</p>
 		</button>
 	{/each}
 </div>

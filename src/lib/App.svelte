@@ -40,15 +40,16 @@
 	};
 </script>
 
-<main class="bg-gradient-to-bl from-blue-100 to-pink-100">
-	<h1 class="font-bold text-4xl">Metacritic's Top 100 Films</h1>
-	<p class="py-4">
-		A full-stack web app that only Dan can interact with. <span
-			class="font-bold">Films seen: {filmsSeen} / 100</span
-		>
-	</p>
-	<FilmList {films} {toggleSeen} />
-</main>
+<!-- <main class="bg-gradient-to-bl from-blue-100 to-pink-100"> -->
+<h1 class="font-bold text-4xl">Metacritic's Top 100 Films</h1>
+<p class="py-4">
+	A full-stack web app that only Dan can interact with. <span class="font-bold"
+		>Films seen: {filmsSeen} / 100</span
+	>
+</p>
+<FilmList {films} {toggleSeen} />
+
+<!-- </main> -->
 
 <style>
 	main {
