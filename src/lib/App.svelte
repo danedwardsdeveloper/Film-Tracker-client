@@ -9,13 +9,14 @@
 
 	import type { Film } from '../types';
 
-	const useDeployedServer: boolean = false;
+	const developmentMode: boolean = true;
+	const useDeployedServer: boolean = true;
 
 	const baseURI: string = useDeployedServer
 		? import.meta.env.VITE_NETLIFY_SERVER_BASE_URI
 		: import.meta.env.VITE_LOCAL_SERVER_BASE_URI;
 
-	console.log(`Base URI: ${baseURI}`);
+	// console.log(`Base URI: ${baseURI}`);
 
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
@@ -28,20 +29,18 @@
 
 	const fetchFilms = async () => {
 		try {
-			if (import.meta.env.VITE_DEV === 'false') {
+			if (!developmentMode) {
 				console.log(`Client in production mode. API enabled`);
 				const response = await axios.get(baseURI);
 				films = response.data;
 				calculateFilmsSeen();
 			} else {
 				console.log(`Client in development mode. API bypassed`);
-				// Simulate loading to demonstrate skeletons
-				// await new Promise((resolve) => setTimeout(resolve, 2000));
 				films = filmsData;
 				calculateFilmsSeen();
 			}
-			calculateFilmsSeen();
-		} catch (error) {
+		} catch (err) {
+			console.error('Error fetching films:', err);
 			error = 'Failed to load films. Please try again later.';
 		} finally {
 			loading = false;
