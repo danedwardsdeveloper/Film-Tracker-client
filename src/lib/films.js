@@ -5,6 +5,7 @@ export default [
 		year: 1988,
 		description:
 			"This masterwork by Krzysztof Kieślowski is one of the twentieth century's greatest achievements in visual storytelling. Originally made for Polish television, Dekalog focuses on the residents of a housing complex in late-Communist Poland, whose lives become subtly intertwined as they face emotional dilemmas that are at once deeply personal and universally human. Its ten hour-long films, drawing from the Ten Commandments for thematic inspiration and an overarching structure, grapple deftly with complex moral and existential questions concerning life, death, love, hate, truth, and the passage of time. Shot by nine different cinematographers, with stirring music by Zbigniew Preisner and compelling performances from established and unknown actors alike, Dekalog arrestingly explores the unknowable forces that shape our lives. Also available are the longer theatrical versions of the series' fifth and sixth films: A Short Film About Killing and A Short Film About Love. [Janus Films]",
+		notes: "This isn't a film - it's a 10-part TV series. No idea why it's on the list.",
 		metascore: 100,
 		seen: true,
 		rank: 1,

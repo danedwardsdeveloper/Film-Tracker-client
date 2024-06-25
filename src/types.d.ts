@@ -6,5 +6,6 @@ export interface Film {
     metascore: number;
     description: string;
     seen: boolean;
+    notes: string;
 }
 

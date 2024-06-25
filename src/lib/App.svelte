@@ -4,6 +4,7 @@
 
 	import filmsData from './films.js';
 
+	import MenuBar from './components/MenuBar.svelte';
 	import FilmList from './components/FilmList.svelte';
 	import Skeleton from './components/skeleton.svelte';
 
@@ -66,8 +67,9 @@
 	let skeletonArray = Array.from({ length: 100 });
 </script>
 
-<header class="text-center px-3 pt-5">
-	<h1 class="font-bold text-4xl">
+<header class="text-center">
+	<MenuBar />
+	<h1 class="font-bold text-4xl px-3 pt-5">
 		Metacritic <span class="text-gray-400">|</span> Top 100 Films Checklist
 	</h1>
 	<p class="py-4">
@@ -77,7 +79,7 @@
 	</p>
 </header>
 
-<main class="flex flex-wrap justify-center mt-10 px-3 gap-0 md:gap-5">
+<main class="flex flex-wrap justify-center mt-10 px-3 gap-x-0 gap-y-5 md:gap-5">
 	{#if error}
 		<p class="text-red-600">{error}</p>
 	{:else if loading}

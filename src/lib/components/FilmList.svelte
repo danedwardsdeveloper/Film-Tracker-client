@@ -25,6 +25,14 @@
 			Rank: {film.rank} <span class="text-gray-400"> |</span>
 			Metascore: {film.metascore}
 		</h3>
+		{#if film.notes}
+			<p class="text-base text-justify pb-2">
+				📝 Dan's notes:
+				<span class="text-gray-700">
+					{film.notes}
+				</span>
+			</p>
+		{/if}
 		<p class="text-base text-justify">{film.description}</p>
 	</button>
 {/each}
