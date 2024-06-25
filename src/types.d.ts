@@ -7,3 +7,9 @@ export interface Film {
     description: string;
     seen: boolean;
 }
+
+export interface ImportMetaEnv {
+    VITE_MESSAGE: string;
+    VITE_DEV: boolean
+}
+

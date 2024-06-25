@@ -15,15 +15,23 @@
 	};
 
 	const fetchFilms = async () => {
-		if (import.meta.env.DEV) {
-			console.log(`Client in production mode: ${import.meta.env.DEV}`);
-			films = filmsData;
-			calculateFilmsSeen();
-		} else {
+		if (!import.meta.env.DEV) {
+			console.log(
+				`Client in production mode\n
+				API enabled`
+			);
 			const response = await axios.get(
 				`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
 			);
 			films = response.data;
+			calculateFilmsSeen();
+		} else {
+			console.log(
+				`Client in development mode\n
+				API bypassed`
+			);
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+			films = filmsData;
 			calculateFilmsSeen();
 		}
 	};
@@ -52,6 +60,7 @@
 		>Films seen: {filmsSeen} / 100</span
 	>
 </p>
+<p>{import.meta.env.VITE_MESSAGE}</p>
 <FilmList {films} {toggleSeen} />
 
 <!-- </main> -->
