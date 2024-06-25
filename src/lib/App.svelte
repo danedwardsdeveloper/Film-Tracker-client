@@ -9,10 +9,18 @@
 
 	import type { Film } from '../types';
 
+	const useDeployedServer: boolean = false;
+
+	const baseURI: string = useDeployedServer
+		? import.meta.env.VITE_NETLIFY_SERVER_BASE_URI
+		: import.meta.env.VITE_LOCAL_SERVER_BASE_URI;
+
+	console.log(`Base URI: ${baseURI}`);
+
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 	let loading: boolean = true;
-	let error: string | null = 'Error message!';
+	let error: string | null = null;
 
 	const calculateFilmsSeen = () => {
 		filmsSeen = films.filter((film) => film.seen).length;
@@ -22,23 +30,19 @@
 		try {
 			if (import.meta.env.VITE_DEV === 'false') {
 				console.log(`Client in production mode. API enabled`);
-				const response = await axios.get(
-					`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
-				);
+				const response = await axios.get(baseURI);
 				films = response.data;
 				calculateFilmsSeen();
 			} else {
 				console.log(`Client in development mode. API bypassed`);
-				await new Promise((resolve) => setTimeout(resolve, 2000));
-				throw new Error('Simulated error for testing');
-				// films = filmsData;
+				// Simulate loading to demonstrate skeletons
+				// await new Promise((resolve) => setTimeout(resolve, 2000));
+				films = filmsData;
 				calculateFilmsSeen();
 			}
+			calculateFilmsSeen();
 		} catch (error) {
-			console.error(
-				'Error fetching films:',
-				error?.message || 'Failed to load films.'
-			);
+			error = 'Failed to load films. Please try again later.';
 		} finally {
 			loading = false;
 		}
