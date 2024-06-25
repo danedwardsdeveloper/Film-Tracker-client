@@ -67,7 +67,9 @@
 </script>
 
 <header class="text-center px-3 pt-5">
-	<h1 class="font-bold text-4xl">Metacritic's Top 100 Films</h1>
+	<h1 class="font-bold text-4xl">
+		Metacritic <span class="text-gray-400">|</span> Top 100 Films Checklist
+	</h1>
 	<p class="py-4">
 		A full-stack web app that only Dan can interact with. <span
 			class="font-bold">Films seen: {filmsSeen} / 100</span
@@ -75,7 +77,7 @@
 	</p>
 </header>
 
-<main class="flex flex-wrap justify-center mt-10 gap-4">
+<main class="flex flex-wrap justify-center mt-10 px-3 gap-0 md:gap-5">
 	{#if error}
 		<p class="text-red-600">{error}</p>
 	{:else if loading}
