@@ -7,19 +7,22 @@
 	import FilmList from './components/FilmList.svelte';
 	import Skeleton from './components/skeleton.svelte';
 
-	import type { Film, ImportMetaEnv } from '../types';
+	import type { Film } from '../types';
 
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 	let loading: boolean = true;
+	let error: string | null = null;
 
 	const calculateFilmsSeen = () => {
 		filmsSeen = films.filter((film) => film.seen).length;
 	};
 
+	console.log(import.meta.env.VITE_DEV);
+
 	const fetchFilms = async () => {
 		try {
-			if (!import.meta.env.DEV) {
+			if (import.meta.env.VITE_DEV === 'false') {
 				console.log(
 					`Client in production mode\n
 				API enabled`
