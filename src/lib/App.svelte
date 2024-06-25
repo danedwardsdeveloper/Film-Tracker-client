@@ -67,15 +67,16 @@
 	let skeletonArray = Array.from({ length: 100 });
 </script>
 
-<!-- <main class="bg-gradient-to-bl from-blue-100 to-pink-100"> -->
-<h1 class="font-bold text-4xl">Metacritic's Top 100 Films</h1>
-<p class="py-4">
-	A full-stack web app that only Dan can interact with. <span class="font-bold"
-		>Films seen: {filmsSeen} / 100</span
-	>
-</p>
+<header class="text-center px-3 pt-5">
+	<h1 class="font-bold text-4xl">Metacritic's Top 100 Films</h1>
+	<p class="py-4">
+		A full-stack web app that only Dan can interact with. <span
+			class="font-bold">Films seen: {filmsSeen} / 100</span
+		>
+	</p>
+</header>
 
-<div class="flex flex-wrap justify-center mt-10 gap-4">
+<main class="flex flex-wrap justify-center mt-10 gap-4">
 	{#if loading}
 		{#each skeletonArray as _}
 			<Skeleton />
@@ -83,14 +84,7 @@
 	{:else}
 		<FilmList {films} {toggleSeen} />
 	{/if}
-</div>
-
-<!-- </main> -->
+</main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		margin: 0 auto;
-	}
 </style>
