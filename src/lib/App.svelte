@@ -1,26 +1,31 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import axios from 'axios';
+
+	import filmsData from './films.js';
+
 	import FilmList from './components/FilmList.svelte';
 	import type { Film } from '../types';
 
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 
+	const calculateFilmsSeen = () => {
+		filmsSeen = films.filter((film) => film.seen).length;
+	};
+
 	const fetchFilms = async () => {
-		try {
+		if (import.meta.env.DEV) {
+			console.log(`Client in production mode: ${import.meta.env.DEV}`);
+			films = filmsData;
+			calculateFilmsSeen();
+		} else {
 			const response = await axios.get(
 				`https://metacritic-top-100-api.netlify.app/.netlify/functions/server/films`
 			);
 			films = response.data;
 			calculateFilmsSeen();
-		} catch (error) {
-			console.error('Error fetching films:', error);
 		}
-	};
-
-	const calculateFilmsSeen = () => {
-		filmsSeen = films.filter((film) => film.seen).length;
 	};
 
 	onMount(() => {
