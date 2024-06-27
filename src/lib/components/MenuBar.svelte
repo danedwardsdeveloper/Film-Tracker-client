@@ -61,11 +61,26 @@
 		}
 	};
 
-	const logout = () => {
-		loggedIn.set(false);
-		username.set('');
-		password.set('');
-	};
+	async function signOut(event) {
+		event.preventDefault();
+		try {
+			const response = await axios.post(
+				'http://localhost:8080/api/auth/signout',
+				{},
+				{
+					withCredentials: true,
+				}
+			);
+
+			if (response.status === 200) {
+				goto('/sign-in');
+			} else {
+				console.error('Sign out failed', response.statusText);
+			}
+		} catch (error) {
+			console.error('Error signing out:', error);
+		}
+	}
 </script>
 
 <nav class="bg-gray-800">
@@ -166,7 +181,8 @@
 								>Sign in</a
 							>
 							<a
-								href="https://www.google.com/"
+								on:click={signOut}
+								href="/sign-in"
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								>Sign out</a
 							>
