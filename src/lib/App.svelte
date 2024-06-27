@@ -2,7 +2,10 @@
 	import { onMount } from 'svelte';
 	import axios from 'axios';
 
-	import { getBaseURL } from '../../svelte.config.js';
+	import { getHttpBase } from '../utils/httpBase.js';
+
+	const httpBase = getHttpBase();
+	console.log(`HTTP base: ${httpBase}`);
 
 	import filmsData from './films.js';
 
@@ -15,7 +18,7 @@
 	const developmentMode: boolean = false;
 	const useDeployedServer: boolean = true;
 
-	const url = `${getBaseURL()}/data`;
+	// const url = `${getBaseURL()}/data`;
 
 	const baseURI: string = useDeployedServer
 		? import.meta.env.VITE_NETLIFY_SERVER_BASE_URI
