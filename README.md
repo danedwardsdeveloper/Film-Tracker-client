@@ -16,3 +16,8 @@
 
 [ ] Create set up log in/ create account pages
 [ ] 404 page
+
+### Extras
+
+-  Show password button
+-  Enforce strong passwords

@@ -161,9 +161,9 @@
 								>Create account</a
 							>
 							<a
-								href="/log-in"
+								href="/sign-in"
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-								>Log in</a
+								>Sign in</a
 							>
 							<a
 								href="https://www.google.com/"
