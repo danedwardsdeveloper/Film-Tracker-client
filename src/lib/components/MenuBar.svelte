@@ -4,6 +4,9 @@
 	import { goto } from '$app/navigation';
 	import axios from 'axios';
 
+	import { getHttpBase } from '../../utils/httpBase';
+	const httpBase = getHttpBase();
+
 	let open: boolean = false;
 
 	const navigation = [{ name: 'About', href: '/about', current: false }];
@@ -60,7 +63,7 @@
 		event.preventDefault();
 		try {
 			const response = await axios.post(
-				'http://localhost:8080/api/auth/signout',
+				`${httpBase}auth/signout`,
 				{},
 				{
 					withCredentials: true,
