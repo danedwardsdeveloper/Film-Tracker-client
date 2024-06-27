@@ -1,5 +1,67 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import axios from 'axios';
+	import { goto } from '$app/navigation';
+
+	import { getHttpBase } from '../../utils/httpBase.js';
+	const httpBase = getHttpBase();
+
+	let email: string = '';
+	let password: string = '';
+	let errorMessage: string = '';
+
+	const signIn = async (event: Event) => {
+		event.preventDefault();
+		errorMessage = '';
+		try {
+			const response = await axios.post(
+				`${httpBase}auth/signin`,
+				{
+					username: email,
+					password: password,
+				},
+				{
+					withCredentials: true,
+				}
+			);
+			if (response.status === 200) {
+				console.log('Sign in successful', response.data);
+				goto('/');
+			} else {
+				errorMessage = 'Sign in failed. Please check your credentials.';
+				console.error('Sign in failed', response.statusText);
+			}
+		} catch (error) {
+			errorMessage = 'Sorry, something went wrong.';
+			console.error('Error signing in:', error);
+		}
+	};
+
+	const signInQuickly = async (event: Event) => {
+		event.preventDefault();
+		errorMessage = '';
+		try {
+			const response = await axios.post(
+				`${httpBase}auth/signin`,
+				{
+					username: import.meta.env.VITE_TEST_USERNAME,
+					password: import.meta.env.VITE_TEST_PASSWORD,
+				},
+				{
+					withCredentials: true,
+				}
+			);
+			if (response.status === 200) {
+				console.log('Sign in successful', response.data);
+				goto('/');
+			} else {
+				errorMessage =
+					'Quick sign in failed. Please check your credentials.';
+			}
+		} catch (error) {
+			errorMessage = 'Error signing in quickly. Please try again later.';
+			console.error('Error signing in quickly:', error);
+		}
+	};
 </script>
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +79,7 @@
 	</div>
 
 	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-		<form class="space-y-6" action="#" method="POST">
+		<form class="space-y-6" on:submit={signIn}>
 			<div>
 				<label
 					for="email"
@@ -30,6 +92,7 @@
 						name="email"
 						type="email"
 						autocomplete="email"
+						bind:value={email}
 						required
 						class="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
@@ -50,6 +113,7 @@
 						name="password"
 						type="password"
 						autocomplete="current-password"
+						bind:value={password}
 						required
 						class="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
@@ -64,9 +128,15 @@
 				>
 			</div>
 
+			{#if errorMessage}
+				<div class="text-red-500 text-sm text-center">
+					{errorMessage}
+				</div>
+			{/if}
+
 			<div>
 				<button
-					type="submit"
+					on:click={signInQuickly}
 					class="flex w-full justify-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold leading-6 text-slate-900 shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
 					>Sign in quickly</button
 				>
