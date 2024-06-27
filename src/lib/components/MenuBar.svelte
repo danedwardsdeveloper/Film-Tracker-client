@@ -6,12 +6,7 @@
 
 	let open: boolean = false;
 
-	const navigation = [
-		{ name: 'Dashboard', href: 'https://www.google.com/', current: true },
-		{ name: 'Team', href: 'https://www.google.com/', current: false },
-		{ name: 'Projects', href: 'https://www.google.com/', current: false },
-		{ name: 'Calendar', href: 'https://www.google.com/', current: false },
-	];
+	const navigation = [{ name: 'About', href: '/about', current: false }];
 
 	// Tailwind clean-up function. Don't delete.
 	function classNames(...classes: string[]): string {
@@ -139,16 +134,6 @@
 			<div
 				class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
 			>
-				<button
-					type="button"
-					class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-				>
-					<span class="absolute -inset-1.5"></span>
-					<span class="sr-only">View notifications</span>
-					<span>🔔</span>
-					<!-- BellIcon replacement -->
-				</button>
-
 				<!-- Profile dropdown -->
 				<div class="relative ml-3">
 					<button
