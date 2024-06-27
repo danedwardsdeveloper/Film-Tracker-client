@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
 	import axios from 'axios';
 
-	let open: boolean = true;
+	let open: boolean = false;
 
 	const navigation = [
 		{ name: 'Dashboard', href: 'https://www.google.com/', current: true },
@@ -12,9 +13,31 @@
 		{ name: 'Calendar', href: 'https://www.google.com/', current: false },
 	];
 
+	// Tailwind clean-up function. Don't delete.
 	function classNames(...classes: string[]): string {
 		return classes.filter(Boolean).join(' ');
 	}
+
+	let dropdownOpen = false;
+
+	function toggleDropdown() {
+		dropdownOpen = !dropdownOpen;
+	}
+
+	function closeDropdown() {
+		dropdownOpen = false;
+	}
+
+	onMount(() => {
+		document.addEventListener('click', (event) => {
+			if (
+				!event.target.closest('#user-menu-button') &&
+				!event.target.closest('#user-menu-dropdown')
+			) {
+				closeDropdown();
+			}
+		});
+	});
 
 	const loggedIn = writable(false);
 	const username = writable('');
@@ -67,11 +90,17 @@
 				class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
 			>
 				<div class="flex flex-shrink-0 items-center">
-					<img
-						class="h-8 w-auto"
-						src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-						alt="Your Company"
-					/>
+					<button
+						on:click={() => goto('/')}
+						type="button"
+						class="flex flex-shrink-0 items-center"
+					>
+						<img
+							class="h-8 w-auto"
+							src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+							alt="Your Company"
+						/>
+					</button>
 				</div>
 				<div class="hidden sm:ml-6 sm:block">
 					<div class="flex space-x-4">
@@ -112,6 +141,7 @@
 						id="user-menu-button"
 						aria-expanded="false"
 						aria-haspopup="true"
+						on:click={toggleDropdown}
 					>
 						<span class="absolute -inset-1.5"></span>
 						<span class="sr-only">Open user menu</span>
@@ -121,25 +151,27 @@
 							alt=""
 						/>
 					</button>
-					<div
-						class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-					>
-						<a
-							href="/create-account"
-							class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-							>Create account</a
+					{#if dropdownOpen}
+						<div
+							class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 						>
-						<a
-							href="/log-in"
-							class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-							>Log in</a
-						>
-						<a
-							href="https://www.google.com/"
-							class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-							>Sign out</a
-						>
-					</div>
+							<a
+								href="/create-account"
+								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>Create account</a
+							>
+							<a
+								href="/log-in"
+								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>Log in</a
+							>
+							<a
+								href="https://www.google.com/"
+								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>Sign out</a
+							>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>
