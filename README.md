@@ -7,7 +7,12 @@
 ### Tech
 
 -  Svelte Kit
+-  TypeScript
+-  Tailwind
+-  Axios
+-  Bcrypt
 
 ### Main Task
 
 [ ] Create set up log in/ create account pages
+[ ] 404 page
