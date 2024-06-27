@@ -1,34 +1,39 @@
 <script>
 	import { writable } from 'svelte/store';
+	import axios from 'axios';
 
-	// Store for managing login state
 	const loggedIn = writable(false);
+	const username = writable('');
+	const password = writable('');
 
-	let username = '';
-	let password = '';
+	const login = async () => {
+		try {
+			const response = await axios.post('http://localhost:5001/login', {
+				username: $username,
+				password: $password,
+			});
 
-	const login = () => {
-		if (username && password) {
-			loggedIn.set(true);
-			// For simplicity, just logging the username and password
-			console.log(
-				`Logged in with username: ${username} and password: ${password}`
-			);
+			if (response.data.message === 'Login successful') {
+				loggedIn.set(true);
+				console.log('Login successful');
+			} else {
+				console.error('Invalid credentials');
+			}
+		} catch (error) {
+			console.error('Error logging in:', error);
 		}
 	};
 
 	const logout = () => {
 		loggedIn.set(false);
-		username = '';
-		password = '';
+		username.set('');
+		password.set('');
 	};
 </script>
 
 <div class="menu-bar">
 	<nav>
 		<a href="/">Home</a>
-		<a href="/about">About</a>
-		<a href="/contact">Contact</a>
 	</nav>
 
 	{#if $loggedIn}
@@ -38,8 +43,8 @@
 		</div>
 	{:else}
 		<div class="login-box">
-			<input type="text" placeholder="Username" bind:value={username} />
-			<input type="password" placeholder="Password" bind:value={password} />
+			<input type="text" placeholder="Username" bind:value={$username} />
+			<input type="password" placeholder="Password" bind:value={$password} />
 			<button on:click={login}>Login</button>
 		</div>
 	{/if}
@@ -69,6 +74,7 @@
 	.login-box input {
 		margin: 0 0.5rem;
 		padding: 0.5rem;
+		color: black;
 	}
 
 	.login-box button {
