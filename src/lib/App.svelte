@@ -15,17 +15,6 @@
 
 	import type { Film } from '../types';
 
-	const developmentMode: boolean = false;
-	const useDeployedServer: boolean = true;
-
-	// const url = `${getBaseURL()}/data`;
-
-	const baseURI: string = useDeployedServer
-		? import.meta.env.VITE_NETLIFY_SERVER_BASE_URI
-		: import.meta.env.VITE_LOCAL_SERVER_BASE_URI;
-
-	// console.log(`Base URI: ${baseURI}`);
-
 	let films: Film[] = [];
 	let filmsSeen: number = 0;
 	let loading: boolean = true;
@@ -37,16 +26,9 @@
 
 	const fetchFilms = async () => {
 		try {
-			if (!developmentMode) {
-				console.log(`Client in production mode. API enabled`);
-				const response = await axios.get(baseURI);
-				films = response.data;
-				calculateFilmsSeen();
-			} else {
-				console.log(`Client in development mode. API bypassed`);
-				films = filmsData;
-				calculateFilmsSeen();
-			}
+			const response = await axios.get(`${httpBase}all`);
+			films = response.data;
+			calculateFilmsSeen();
 		} catch (err) {
 			console.error('Error fetching films:', err);
 			error = 'Failed to load films. Please try again later.';

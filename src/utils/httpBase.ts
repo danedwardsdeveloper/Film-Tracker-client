@@ -6,7 +6,7 @@ export function getHttpBase(): string {
 
     switch (server) {
         case 'local':
-            httpBase = 'http://localhost:8080/api';
+            httpBase = 'http://localhost:8080/api/';
             console.log('Using local server'); // Optional, log message
             break;
         case 'netlify':
