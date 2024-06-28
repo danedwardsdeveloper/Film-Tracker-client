@@ -1,25 +1,25 @@
 <script lang="ts">
-	import { login, loginQuickly } from '$utils/auth';
+	import { signin, signInQuickly } from '$utils/auth';
 
 	let email: string = '';
 	let password: string = '';
 	let errorMessage: string = '';
 
-	const signIn = async (event: Event) => {
+	const handleSignIn = async (event: Event) => {
 		event.preventDefault();
 		errorMessage = '';
 		try {
-			await login(email, password);
+			await signin(email, password);
 		} catch (error) {
 			errorMessage = (error as Error).message;
 		}
 	};
 
-	const signInQuickly = async (event: Event) => {
+	const handleSignInQuickly = async (event: Event) => {
 		event.preventDefault();
 		errorMessage = '';
 		try {
-			await loginQuickly();
+			await signInQuickly();
 		} catch (error) {
 			errorMessage = (error as Error).message;
 		}
@@ -41,7 +41,7 @@
 	</div>
 
 	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-		<form class="space-y-6" on:submit={signIn}>
+		<form class="space-y-6" on:submit={handleSignIn}>
 			<div>
 				<label
 					for="email"
@@ -98,7 +98,7 @@
 
 			<div>
 				<button
-					on:click={signInQuickly}
+					on:click={handleSignInQuickly}
 					class="flex w-full justify-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold leading-6 text-slate-900 shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
 					>Sign in quickly</button
 				>

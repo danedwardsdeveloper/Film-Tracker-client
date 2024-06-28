@@ -1,30 +1,28 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
-	import axios from 'axios';
 
-	import { getHttpBase } from '../../utils/httpBase';
-	const httpBase = getHttpBase();
+	import { isLoggedIn, checkLoginStatus, signOut } from '$utils/auth';
 
-	let open: boolean = false;
+	$: loggedIn = $isLoggedIn;
+
+	onMount(() => {
+		checkLoginStatus();
+	});
 
 	const navigation = [{ name: 'About', href: '/about', current: false }];
 
-	// Tailwind clean-up function. Don't delete.
-	function classNames(...classes: string[]): string {
-		return classes.filter(Boolean).join(' ');
+	let profileDropdownOpen: boolean = false;
+
+	function toggleProfileDropdown() {
+		profileDropdownOpen = !profileDropdownOpen;
 	}
 
-	let dropdownOpen = false;
-
-	function toggleDropdown() {
-		dropdownOpen = !dropdownOpen;
+	function closeProfileDropdown() {
+		profileDropdownOpen = false;
 	}
 
-	function closeDropdown() {
-		dropdownOpen = false;
-	}
+	let mobileMenuOpen: boolean = false;
 
 	onMount(() => {
 		document.addEventListener('click', (event) => {
@@ -32,52 +30,14 @@
 				!event.target.closest('#user-menu-button') &&
 				!event.target.closest('#user-menu-dropdown')
 			) {
-				closeDropdown();
+				closeProfileDropdown();
 			}
 		});
 	});
 
-	const loggedIn = writable(false);
-	const username = writable('');
-	const password = writable('');
-
-	const login = async () => {
-		try {
-			const response = await axios.post('http://localhost:5001/login', {
-				username: $username,
-				password: $password,
-			});
-
-			if (response.data.message === 'Login successful') {
-				loggedIn.set(true);
-				console.log('Login successful');
-			} else {
-				console.error('Invalid credentials');
-			}
-		} catch (error) {
-			console.error('Error logging in:', error);
-		}
-	};
-
-	async function signOut(event) {
-		event.preventDefault();
-		try {
-			const response = await axios.post(
-				`${httpBase}auth/signout`,
-				{},
-				{
-					withCredentials: true,
-				}
-			);
-
-			if (response.status === 200) {
-				goto('/sign-in');
-			} else {
-				console.error('Sign out failed', response.statusText);
-			}
-		} catch (error) {
-			console.error('Error signing out:', error);
-		}
+	// Tailwind clean-up function. Don't delete.
+	function classNames(...classes: string[]): string {
+		return classes.filter(Boolean).join(' ');
 	}
 </script>
 
@@ -88,11 +48,11 @@
 				<!-- Mobile menu button-->
 				<button
 					class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-					on:click={() => (open = !open)}
+					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
 				>
 					<span class="absolute -inset-0.5"></span>
 					<span class="sr-only">Open main menu</span>
-					{#if open}
+					{#if mobileMenuOpen}
 						<span>❌</span> <!-- XMarkIcon replacement -->
 					{:else}
 						<span>☰</span> <!-- Bars3Icon replacement -->
@@ -131,6 +91,11 @@
 								{item.name}
 							</a>
 						{/each}
+						<p
+							class={`rounded-md px-3 py-2 text-sm font-medium ${loggedIn ? 'text-green-500' : 'text-orange-500'}`}
+						>
+							Logged in: {loggedIn}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -144,7 +109,7 @@
 						id="user-menu-button"
 						aria-expanded="false"
 						aria-haspopup="true"
-						on:click={toggleDropdown}
+						on:click={toggleProfileDropdown}
 					>
 						<span class="absolute -inset-1.5"></span>
 						<span class="sr-only">Open user menu</span>
@@ -154,7 +119,7 @@
 							alt=""
 						/>
 					</button>
-					{#if dropdownOpen}
+					{#if profileDropdownOpen}
 						<div
 							class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 						>
@@ -181,7 +146,7 @@
 		</div>
 	</div>
 
-	{#if open}
+	{#if mobileMenuOpen}
 		<div class="sm:hidden">
 			<div class="space-y-1 px-2 pb-3 pt-2">
 				{#each navigation as item}

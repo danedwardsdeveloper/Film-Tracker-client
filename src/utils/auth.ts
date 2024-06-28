@@ -14,7 +14,7 @@ export function checkLoginStatus(): void {
     }
 }
 
-export async function login(email: string, password: string): Promise<void> {
+export async function signin(email: string, password: string): Promise<void> {
     const httpBase = getHttpBase();
     try {
         const response = await axios.post(
@@ -36,7 +36,7 @@ export async function login(email: string, password: string): Promise<void> {
     }
 }
 
-export async function loginQuickly(): Promise<void> {
+export async function signInQuickly(): Promise<void> {
     const httpBase = getHttpBase();
     try {
         const response = await axios.post(
@@ -61,7 +61,7 @@ export async function loginQuickly(): Promise<void> {
     }
 }
 
-export function logout(): void {
+export function signOut(): void {
     localStorage.removeItem('user');
     isLoggedIn.set(false);
 }
