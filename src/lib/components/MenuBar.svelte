@@ -2,17 +2,16 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
+	import { useClickOutside } from '$utils/useClickOutside';
 	import { isLoggedIn, checkLoginStatus, signOut } from '$utils/auth';
-
-	$: loggedIn = $isLoggedIn;
-
-	onMount(() => {
-		checkLoginStatus();
-	});
 
 	const navigation = [{ name: 'About', href: '/about', current: false }];
 
+	let userMenuButton: HTMLButtonElement;
+	let mobileMenuOpen: boolean = false;
 	let profileDropdownOpen: boolean = false;
+
+	$: loggedIn = $isLoggedIn;
 
 	function toggleProfileDropdown() {
 		profileDropdownOpen = !profileDropdownOpen;
@@ -22,23 +21,18 @@
 		profileDropdownOpen = false;
 	}
 
-	let mobileMenuOpen: boolean = false;
-
-	onMount(() => {
-		document.addEventListener('click', (event) => {
-			if (
-				!event.target.closest('#user-menu-button') &&
-				!event.target.closest('#user-menu-dropdown')
-			) {
-				closeProfileDropdown();
-			}
-		});
-	});
+	function toggleMobileMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
 
 	// Tailwind clean-up function. Don't delete.
 	function classNames(...classes: string[]): string {
 		return classes.filter(Boolean).join(' ');
 	}
+
+	onMount(() => {
+		checkLoginStatus();
+	});
 </script>
 
 <nav class="bg-gray-800">
@@ -48,7 +42,7 @@
 				<!-- Mobile menu button-->
 				<button
 					class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
+					on:click={toggleMobileMenu}
 				>
 					<span class="absolute -inset-0.5"></span>
 					<span class="sr-only">Open main menu</span>
@@ -110,6 +104,7 @@
 						aria-expanded="false"
 						aria-haspopup="true"
 						on:click={toggleProfileDropdown}
+						bind:this={userMenuButton}
 					>
 						<span class="absolute -inset-1.5"></span>
 						<span class="sr-only">Open user menu</span>
@@ -120,8 +115,12 @@
 						/>
 					</button>
 					{#if profileDropdownOpen}
-						<div
+						<button
 							class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+							use:useClickOutside={{
+								callback: closeProfileDropdown,
+								ignoredElements: [userMenuButton],
+							}}
 						>
 							<a
 								href="/create-account"
@@ -139,7 +138,7 @@
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								>Sign out</a
 							>
-						</div>
+						</button>
 					{/if}
 				</div>
 			</div>
