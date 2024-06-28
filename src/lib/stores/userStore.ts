@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
 
 interface User {
-    name: string;
-    loggedIn: boolean;
+    username: string;
+    isLoggedIn: boolean;
 }
 
 export const user = writable<User>({
-    name: '',
-    loggedIn: false,
+    username: '',
+    isLoggedIn: false,
 });
