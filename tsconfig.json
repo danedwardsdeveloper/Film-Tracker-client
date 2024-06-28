@@ -9,8 +9,14 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler"
-	}
+		"moduleResolution": "bundler",
+		"paths": {
+			"$utils/*": ["./src/utils/*"],
+			"$stores/*": ["./src/stores/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules/*", "public/*"]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	// except $lib which is handled by https://kit.svelte.dev/docs/configuration#files
 	//
