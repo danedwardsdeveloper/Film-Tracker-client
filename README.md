@@ -14,10 +14,10 @@
 
 ### Main Task
 
-[ ] Create set up log in/ create account pages
-[ ] 404 page
+-  Render profile icon/ initial dynamically
 
 ### Extras
 
+-  404 page
 -  Show password button
 -  Enforce strong passwords
