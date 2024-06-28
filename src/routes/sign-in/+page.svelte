@@ -1,9 +1,5 @@
 <script lang="ts">
-	import axios from 'axios';
-	import { goto } from '$app/navigation';
-
-	import { getHttpBase } from '../../utils/httpBase.js';
-	const httpBase = getHttpBase();
+	import { login, loginQuickly } from '$utils/auth';
 
 	let email: string = '';
 	let password: string = '';
@@ -13,26 +9,9 @@
 		event.preventDefault();
 		errorMessage = '';
 		try {
-			const response = await axios.post(
-				`${httpBase}auth/signin`,
-				{
-					username: email,
-					password: password,
-				},
-				{
-					withCredentials: true,
-				}
-			);
-			if (response.status === 200) {
-				console.log('Sign in successful', response.data);
-				goto('/');
-			} else {
-				errorMessage = 'Sign in failed. Please check your credentials.';
-				console.error('Sign in failed', response.statusText);
-			}
+			await login(email, password);
 		} catch (error) {
-			errorMessage = 'Sorry, something went wrong.';
-			console.error('Error signing in:', error);
+			errorMessage = (error as Error).message;
 		}
 	};
 
@@ -40,26 +19,9 @@
 		event.preventDefault();
 		errorMessage = '';
 		try {
-			const response = await axios.post(
-				`${httpBase}auth/signin`,
-				{
-					username: import.meta.env.VITE_TEST_USERNAME,
-					password: import.meta.env.VITE_TEST_PASSWORD,
-				},
-				{
-					withCredentials: true,
-				}
-			);
-			if (response.status === 200) {
-				console.log('Sign in successful', response.data);
-				goto('/');
-			} else {
-				errorMessage =
-					'Quick sign in failed. Please check your credentials.';
-			}
+			await loginQuickly();
 		} catch (error) {
-			errorMessage = 'Error signing in quickly. Please try again later.';
-			console.error('Error signing in quickly:', error);
+			errorMessage = (error as Error).message;
 		}
 	};
 </script>

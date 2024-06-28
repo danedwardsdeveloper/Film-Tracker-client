@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
+import axios from 'axios';
+import { goto } from '$app/navigation';
+import { getHttpBase } from '../utils/httpBase';
 
-// Define and export the isLoggedIn store
 export const isLoggedIn = writable<boolean>(false);
 
-// Example function to check login status
 export function checkLoginStatus(): void {
-    // Replace this with your actual authentication check logic
     const user = localStorage.getItem('user');
     if (user) {
         isLoggedIn.set(true);
@@ -14,14 +14,53 @@ export function checkLoginStatus(): void {
     }
 }
 
-// Example function to log in
-export function login(): void {
-    // Replace this with your actual login logic
-    localStorage.setItem('user', 'exampleUser');
-    isLoggedIn.set(true);
+export async function login(email: string, password: string): Promise<void> {
+    const httpBase = getHttpBase();
+    try {
+        const response = await axios.post(
+            `${httpBase}auth/signin`,
+            { username: email, password: password },
+            { withCredentials: true }
+        );
+        if (response.status === 200) {
+            console.log('Sign in successful', response.data);
+            isLoggedIn.set(true);
+            goto('/');
+        } else {
+            console.error('Sign in failed', response.statusText);
+            throw new Error('Sign in failed. Please check your credentials.');
+        }
+    } catch (error) {
+        console.error('Error signing in:', error);
+        throw new Error('Sorry, something went wrong.');
+    }
 }
 
-// Example function to log out
+export async function loginQuickly(): Promise<void> {
+    const httpBase = getHttpBase();
+    try {
+        const response = await axios.post(
+            `${httpBase}auth/signin`,
+            {
+                username: import.meta.env.VITE_TEST_USERNAME,
+                password: import.meta.env.VITE_TEST_PASSWORD,
+            },
+            { withCredentials: true }
+        );
+        if (response.status === 200) {
+            console.log('Sign in successful', response.data);
+            isLoggedIn.set(true);
+            goto('/');
+        } else {
+            console.error('Quick sign in failed', response.statusText);
+            throw new Error('Quick sign in failed. Please check your credentials.');
+        }
+    } catch (error) {
+        console.error('Error signing in quickly:', error);
+        throw new Error('Error signing in quickly. Please try again later.');
+    }
+}
+
 export function logout(): void {
     localStorage.removeItem('user');
     isLoggedIn.set(false);
