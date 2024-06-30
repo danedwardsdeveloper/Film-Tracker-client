@@ -25,6 +25,10 @@
 		mobileMenuOpen = !mobileMenuOpen;
 	}
 
+	function handleSignOut() {
+		signOut(), closeProfileDropdown();
+	}
+
 	// Tailwind clean-up function. Don't delete.
 	function classNames(...classes: string[]): string {
 		return classes.filter(Boolean).join(' ');
@@ -122,22 +126,26 @@
 								ignoredElements: [userMenuButton],
 							}}
 						>
-							<a
-								href="/create-account"
-								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-								>Create account</a
-							>
-							<a
-								href="/sign-in"
-								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-								>Sign in</a
-							>
-							<a
-								on:click={signOut}
-								href="/sign-in"
-								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-								>Sign out</a
-							>
+							{#if !loggedIn}
+								<a
+									href="/create-account"
+									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									>Create account</a
+								>
+								<a
+									href="/sign-in"
+									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									>Sign in</a
+								>
+							{/if}
+							{#if loggedIn}
+								<a
+									on:click={handleSignOut}
+									href="/sign-in"
+									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									>Sign out</a
+								>
+							{/if}
 						</button>
 					{/if}
 				</div>
