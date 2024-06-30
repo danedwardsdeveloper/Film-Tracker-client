@@ -6,8 +6,8 @@ import { getHttpBase } from '../utils/httpBase';
 export const isLoggedIn = writable<boolean>(false);
 
 export function checkLoginStatus(): void {
-    const user = localStorage.getItem('user');
-    if (user) {
+    const token = getCookie('jwt');
+    if (token) {
         isLoggedIn.set(true);
     } else {
         isLoggedIn.set(false);
@@ -24,6 +24,7 @@ export async function signin(email: string, password: string): Promise<void> {
         );
         if (response.status === 200) {
             console.log('Sign in successful', response.data);
+            setCookie('jwt', response.data.token, 7);
             isLoggedIn.set(true);
             goto('/');
         } else {
@@ -49,6 +50,7 @@ export async function signInQuickly(): Promise<void> {
         );
         if (response.status === 200) {
             console.log('Sign in successful', response.data);
+            setCookie('jwt', response.data.token, 7, 'Lax');
             isLoggedIn.set(true);
             goto('/');
         } else {
@@ -62,6 +64,22 @@ export async function signInQuickly(): Promise<void> {
 }
 
 export function signOut(): void {
-    localStorage.removeItem('user');
+    setCookie('jwt', '', -1);
     isLoggedIn.set(false);
+}
+
+function getCookie(name: string) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.trim().split('=');
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+    return null;
+}
+
+function setCookie(name: string, value: string, days: number, sameSite: 'Strict' | 'Lax' = 'Lax') {
+    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; SameSite=${sameSite}; Secure`;
 }
