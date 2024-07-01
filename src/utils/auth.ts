@@ -1,12 +1,9 @@
-import { writable } from 'svelte/store';
 import axios from 'axios';
 import { goto } from '$app/navigation';
 import { getHttpBase } from '../utils/httpBase';
 import Cookies from 'js-cookie';
+import { username, isLoggedIn } from '../lib/stores/userStore';
 
-export const isLoggedIn = writable<boolean>(false);
-
-export const user = writable<string | null>(null);
 
 export function checkLoginStatus(): void {
     const token = Cookies.get('jwt');
@@ -25,11 +22,14 @@ export async function signin(email: string, password: string): Promise<void> {
             { username: email, password: password },
             { withCredentials: true }
         );
+        console.log('Sign in successful', response);
+
+        console.log(`Response code: ${response.status}`)
+
         if (response.status === 200) {
-            console.log('Sign in successful', response.data);
             Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
-            user.set(email)
+            username.set(response.data.username);
             goto('/');
         } else {
             console.error('Sign in failed', response.statusText);
@@ -56,6 +56,7 @@ export async function signInQuickly(): Promise<void> {
             console.log('Sign in successful', response.data);
             Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
+            username.set(response.data.username);
             goto('/');
         } else {
             console.error('Quick sign in failed', response.statusText);
@@ -71,20 +72,3 @@ export function signOut(): void {
     Cookies.remove('jwt');
     isLoggedIn.set(false);
 }
-
-// export function getCookie(name: string) {
-//     const cookies = document.cookie.split(';');
-//     for (const cookie of cookies) {
-//         const [cookieName, cookieValue] = cookie.trim().split('=');
-//         console.log(`Cookie name: ${cookieName}, Value: ${decodeURIComponent(cookieValue || '')}`);
-//         if (cookieName === name) {
-//             return decodeURIComponent(cookieValue || '');
-//         }
-//     }
-//     return null;
-// }
-
-// function setCookie(name: string, value: string, days: number, sameSite: 'Strict' | 'Lax' = 'Lax') {
-//     const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-//     document.cookie = `${name}=${value}; expires=${expires}; SameSite=${sameSite}; Secure`;
-// }

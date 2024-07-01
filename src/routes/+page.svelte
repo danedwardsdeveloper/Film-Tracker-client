@@ -3,14 +3,12 @@
 	import axios from 'axios';
 	import Cookies from 'js-cookie';
 
-	import { isLoggedIn } from '$utils/auth';
+	import { isLoggedIn, username } from '../lib/stores/userStore';
 
 	import { getHttpBase } from '../utils/httpBase.js';
 
 	const httpBase = getHttpBase();
 	console.log(`HTTP base: ${httpBase}`);
-
-	// import filmsData from '../../films.js';
 
 	import FilmList from '../lib/components/FilmList.svelte';
 	import Skeleton from '../lib/components/skeleton.svelte';
@@ -42,7 +40,7 @@
 					},
 					withCredentials: true,
 				});
-				films = response.data;
+				films = response.data.films;
 				calculateFilmsSeen();
 			} catch (err) {
 				console.error('Error fetching films:', err);

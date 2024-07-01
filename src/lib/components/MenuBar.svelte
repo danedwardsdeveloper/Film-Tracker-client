@@ -3,15 +3,32 @@
 	import { goto } from '$app/navigation';
 
 	import { useClickOutside } from '$utils/useClickOutside';
-	import { isLoggedIn, checkLoginStatus, signOut } from '$utils/auth';
+	import { checkLoginStatus, signOut } from '$utils/auth';
+	import { username, isLoggedIn } from '../stores/userStore';
+
+	let userInitial: string | undefined; // Declare the reactive variable
+
+	$: userInitial = $username?.charAt(0)?.toUpperCase();
+
+	// let currentUser: string | null;
+	// let userName = $username;
+
+	// import { username } from '../../utils/auth';
 
 	const navigation = [{ name: 'About', href: '/about', current: false }];
 
 	let userMenuButton: HTMLButtonElement;
 	let mobileMenuOpen: boolean = false;
 	let profileDropdownOpen: boolean = false;
+	// let initial = user.username;
 
-	$: loggedIn = $isLoggedIn;
+	// let usernameSubscription = user.subscribe((value) => {
+	// 	console.log('Username updated:', value.username);
+	// });
+
+	// console.log(initial);
+
+	// let userInitial: string | null = 'D';
 
 	function toggleProfileDropdown() {
 		profileDropdownOpen = !profileDropdownOpen;
@@ -89,11 +106,6 @@
 								{item.name}
 							</a>
 						{/each}
-						<p
-							class={`rounded-md px-3 py-2 text-sm font-medium ${loggedIn ? 'text-green-500' : 'text-orange-500'}`}
-						>
-							Logged in: {loggedIn}
-						</p>
 					</div>
 				</div>
 			</div>
@@ -103,7 +115,7 @@
 				<!-- Profile dropdown -->
 				<div class="relative ml-3">
 					<button
-						class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+						class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 hover:bg-gray-700"
 						id="user-menu-button"
 						aria-expanded="false"
 						aria-haspopup="true"
@@ -112,11 +124,9 @@
 					>
 						<span class="absolute -inset-1.5"></span>
 						<span class="sr-only">Open user menu</span>
-						<img
-							class="h-8 w-8 rounded-full"
-							src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-							alt=""
-						/>
+						<span class="text-white text-2xl h-10 w-10 pt-1">
+							{$isLoggedIn ? userInitial : `?`}
+						</span>
 					</button>
 					{#if profileDropdownOpen}
 						<button
@@ -126,7 +136,7 @@
 								ignoredElements: [userMenuButton],
 							}}
 						>
-							{#if !loggedIn}
+							{#if !isLoggedIn}
 								<a
 									href="/create-account"
 									on:click={closeProfileDropdown}
@@ -140,7 +150,7 @@
 									>Sign in</a
 								>
 							{/if}
-							{#if loggedIn}
+							{#if isLoggedIn}
 								<a
 									on:click={handleSignOut}
 									href="/sign-in"
