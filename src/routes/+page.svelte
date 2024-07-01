@@ -105,6 +105,7 @@
 			);
 
 			console.log('Toggle seen response:', response.data); // Log for debugging
+			calculateFilmsSeen();
 			return response.data;
 		} catch (error) {
 			console.error('Error toggling seen status:', error);
