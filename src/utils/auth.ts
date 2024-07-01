@@ -82,5 +82,4 @@ export function signOut(): void {
     Cookies.remove('jwt');
     isLoggedIn.set(false);
     setUserInitial("");
-
 }

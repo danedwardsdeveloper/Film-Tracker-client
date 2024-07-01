@@ -46,13 +46,13 @@
 				<label
 					for="email"
 					class="block text-sm font-medium leading-6 text-gray-900"
-					>Email address</label
+					>Username</label
 				>
 				<div class="mt-2">
 					<input
 						id="email"
 						name="email"
-						type="email"
+						type="name"
 						autocomplete="email"
 						bind:value={email}
 						required
