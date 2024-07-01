@@ -6,12 +6,12 @@ export function getHttpBase(): string {
 
     switch (server) {
         case 'local':
-            httpBase = 'http://localhost:8080/api/';
-            console.log('Using local server'); // Optional, log message
+            httpBase = 'https://localhost:8080/api/';
+            console.log('Using local server');
             break;
         case 'netlify':
             httpBase = `https://metacritic-top-100-api.netlify.app/api/`;
-            console.log('Using Netlify server'); // Optional, log message
+            console.log('Using Netlify server');
             break;
         default:
             throw new Error('VITE_SERVER variable in .env must be either local or netlify');
