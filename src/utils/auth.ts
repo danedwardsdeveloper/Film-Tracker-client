@@ -3,6 +3,8 @@ import { goto } from '$app/navigation';
 import Cookies from 'js-cookie';
 import { writable } from 'svelte/store';
 
+import { setUserInitial } from '../lib/stores/userStore';
+
 import { getHttpBase } from '../utils/httpBase';
 import { isLoggedIn } from '../lib/stores/userStore';
 
@@ -34,7 +36,8 @@ export async function signin(email: string, password: string): Promise<void> {
         if (response.status === 200) {
             Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
-            username.set(response.data.username);
+            const userInitial: string = response.data.username.charAt(0).toUpperCase();
+            setUserInitial(userInitial);
             goto('/');
         } else {
             console.error('Sign in failed', response.statusText);
@@ -61,7 +64,9 @@ export async function signInQuickly(): Promise<void> {
             console.log('Sign in successful', response.data);
             Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
-            username.set(response.data.username);
+            // username.set(response.data.username);
+            const userInitial: string = response.data.username.charAt(0).toUpperCase();
+            setUserInitial(userInitial);
             goto('/');
         } else {
             console.error('Quick sign in failed', response.statusText);
@@ -76,4 +81,6 @@ export async function signInQuickly(): Promise<void> {
 export function signOut(): void {
     Cookies.remove('jwt');
     isLoggedIn.set(false);
+    setUserInitial("");
+
 }

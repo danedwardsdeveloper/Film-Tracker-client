@@ -116,7 +116,7 @@
 <main
 	class="flex flex-wrap justify-center pt-10 px-3 gap-x-0 gap-y-5 md:gap-5 bg-gradient-to-r from-blue-100 to-pink-100"
 >
-	<header class="text-center">
+	<header class="text-center w-full">
 		<h1 class="font-bold text-4xl px-3 pb-5">
 			Metacritic <span class="text-gray-400">|</span> Top 100 Films Checklist
 		</h1>

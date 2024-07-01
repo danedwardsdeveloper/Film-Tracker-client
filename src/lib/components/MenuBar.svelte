@@ -4,31 +4,14 @@
 
 	import { useClickOutside } from '$utils/useClickOutside';
 	import { checkLoginStatus, signOut } from '$utils/auth';
-	import { username, isLoggedIn } from '../stores/userStore';
-
-	let userInitial: string | undefined; // Declare the reactive variable
-
-	$: userInitial = $username?.charAt(0)?.toUpperCase();
-
-	// let currentUser: string | null;
-	// let userName = $username;
-
-	// import { username } from '../../utils/auth';
+	import { isLoggedIn } from '../stores/userStore';
+	import { userInitial, getUserInitial } from '../stores/userStore';
 
 	const navigation = [{ name: 'About', href: '/about', current: false }];
 
 	let userMenuButton: HTMLButtonElement;
 	let mobileMenuOpen: boolean = false;
 	let profileDropdownOpen: boolean = false;
-	// let initial = user.username;
-
-	// let usernameSubscription = user.subscribe((value) => {
-	// 	console.log('Username updated:', value.username);
-	// });
-
-	// console.log(initial);
-
-	// let userInitial: string | null = 'D';
 
 	function toggleProfileDropdown() {
 		profileDropdownOpen = !profileDropdownOpen;
@@ -53,6 +36,11 @@
 
 	onMount(() => {
 		checkLoginStatus();
+
+		const initial = getUserInitial();
+		if (initial) {
+			userInitial.set(initial);
+		}
 	});
 </script>
 
@@ -124,9 +112,13 @@
 					>
 						<span class="absolute -inset-1.5"></span>
 						<span class="sr-only">Open user menu</span>
-						<span class="text-white text-2xl h-10 w-10 pt-1">
-							{$isLoggedIn ? userInitial : `?`}
-						</span>
+						{#if $isLoggedIn}
+							<span class="text-white text-2xl h-10 w-10 pt-1">
+								{$userInitial}
+							</span>
+						{:else}
+							<span class="text-white text-2xl h-10 w-10 pt-1"> ? </span>
+						{/if}
 					</button>
 					{#if profileDropdownOpen}
 						<button
