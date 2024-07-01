@@ -65,10 +65,13 @@
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
 					},
+					withCredentials: true,
 				}
 			);
 
+			console.log('Toggle seen response:', response.data);
 			return response.data;
 		} catch (error) {
 			console.error('Error toggling seen status:', error);

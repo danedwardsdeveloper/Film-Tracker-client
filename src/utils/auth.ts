@@ -27,7 +27,7 @@ export async function signin(email: string, password: string): Promise<void> {
         );
         if (response.status === 200) {
             console.log('Sign in successful', response.data);
-            Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: true });
+            Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
             user.set(email)
             goto('/');
@@ -54,7 +54,7 @@ export async function signInQuickly(): Promise<void> {
         );
         if (response.status === 200) {
             console.log('Sign in successful', response.data);
-            setCookie('jwt', response.data.token, 7, 'Lax');
+            Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: false });
             isLoggedIn.set(true);
             goto('/');
         } else {
@@ -68,7 +68,7 @@ export async function signInQuickly(): Promise<void> {
 }
 
 export function signOut(): void {
-    setCookie('jwt', '', -1);
+    Cookies.remove('jwt');
     isLoggedIn.set(false);
 }
 
@@ -84,7 +84,7 @@ export function signOut(): void {
 //     return null;
 // }
 
-function setCookie(name: string, value: string, days: number, sameSite: 'Strict' | 'Lax' = 'Lax') {
-    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = `${name}=${value}; expires=${expires}; SameSite=${sameSite}; Secure`;
-}
+// function setCookie(name: string, value: string, days: number, sameSite: 'Strict' | 'Lax' = 'Lax') {
+//     const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+//     document.cookie = `${name}=${value}; expires=${expires}; SameSite=${sameSite}; Secure`;
+// }
