@@ -3,10 +3,9 @@ import { goto } from '$app/navigation';
 import Cookies from 'js-cookie';
 import { writable } from 'svelte/store';
 
-import { setUserInitial } from '../lib/stores/userStore';
+import { setUserInitial, isLoggedIn } from '../lib/stores/userStore';
 
 import { getHttpBase } from '../utils/httpBase';
-import { isLoggedIn } from '../lib/stores/userStore';
 
 export const username = writable('');
 

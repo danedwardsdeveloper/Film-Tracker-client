@@ -7,6 +7,8 @@
 	});
 </script>
 
-<div class="text-center mt-10">
-	<h1 class="text-3xl">About page</h1>
-</div>
+<main class="bg-gradient-to-r from-blue-100 to-pink-100 h-screen">
+	<div class="text-center pt-10">
+		<h1 class="text-3xl">About page</h1>
+	</div>
+</main>
