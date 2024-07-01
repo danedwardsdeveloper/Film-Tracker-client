@@ -129,11 +129,13 @@
 							{#if !loggedIn}
 								<a
 									href="/create-account"
+									on:click={closeProfileDropdown}
 									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 									>Create account</a
 								>
 								<a
 									href="/sign-in"
+									on:click={closeProfileDropdown}
 									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 									>Sign in</a
 								>
