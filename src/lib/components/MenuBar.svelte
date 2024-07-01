@@ -117,7 +117,7 @@
 								{$userInitial}
 							</span>
 						{:else}
-							<span class="text-white text-2xl h-10 w-10 pt-1"> ? </span>
+							<span class="text-white text-2xl h-10 w-10 pt-1">👤</span>
 						{/if}
 					</button>
 					{#if profileDropdownOpen}
