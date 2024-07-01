@@ -1,10 +1,15 @@
 import axios from 'axios';
 import { goto } from '$app/navigation';
-import { getHttpBase } from '../utils/httpBase';
 import Cookies from 'js-cookie';
-import { username, isLoggedIn } from '../lib/stores/userStore';
+import { writable } from 'svelte/store';
+
+import { getHttpBase } from '../utils/httpBase';
+import { isLoggedIn } from '../lib/stores/userStore';
+
+export const username = writable('');
 
 
+// This is not secure!
 export function checkLoginStatus(): void {
     const token = Cookies.get('jwt');
     if (token) {
