@@ -4,8 +4,13 @@
 	export let films: Film[] = [];
 	export let toggleSeen: (id: string) => void;
 
-	const handleToggle = (id: string) => {
-		toggleSeen(id);
+	const handleToggle = async (id: string) => {
+		const updatedFilm = await toggleSeen(id);
+		if (updatedFilm) {
+			films = films.map((film) =>
+				film._id === id ? { ...film, seen: updatedFilm.seen } : film
+			);
+		}
 	};
 </script>
 

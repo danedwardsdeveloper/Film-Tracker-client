@@ -3,11 +3,9 @@
 	import axios from 'axios';
 	import Cookies from 'js-cookie';
 
-	import { isLoggedIn, checkLoginStatus, signOut } from '$utils/auth';
+	import { isLoggedIn } from '$utils/auth';
 
 	import { getHttpBase } from '../utils/httpBase.js';
-
-	$: loggedIn = $isLoggedIn;
 
 	const httpBase = getHttpBase();
 	console.log(`HTTP base: ${httpBase}`);
@@ -28,21 +26,46 @@
 		filmsSeen = films.filter((film) => film.seen).length;
 	};
 
-	const fetchFilms = async () => {
-		try {
-			const response = await axios.get(`${httpBase}all`);
-			films = response.data;
-			calculateFilmsSeen();
-		} catch (err) {
-			console.error('Error fetching films:', err);
-			error = 'Failed to load films. Please try again later.';
-		} finally {
-			loading = false;
+	console.log($isLoggedIn);
+
+	const getFilms = async () => {
+		const token = Cookies.get('jwt');
+		loading = true;
+		error = '';
+
+		if ($isLoggedIn) {
+			try {
+				const response = await axios.get(`${httpBase}user`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+					withCredentials: true,
+				});
+				films = response.data;
+				calculateFilmsSeen();
+			} catch (err) {
+				console.error('Error fetching films:', err);
+				error = 'Failed to load films. Please try again later.';
+			} finally {
+				loading = false;
+			}
+		} else {
+			try {
+				const response = await axios.get(`${httpBase}all`);
+				films = response.data;
+				calculateFilmsSeen();
+			} catch (err) {
+				console.error('Error fetching films:', err);
+				error = 'Failed to load films. Please try again later.';
+			} finally {
+				loading = false;
+			}
 		}
 	};
 
 	onMount(() => {
-		fetchFilms();
+		getFilms();
 	});
 
 	const toggleSeen = async (id: string) => {
