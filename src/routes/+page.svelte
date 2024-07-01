@@ -82,6 +82,18 @@
 				return;
 			}
 
+			const targetFilmIndex = films.findIndex((film) => film._id === id);
+			if (targetFilmIndex === -1) {
+				return;
+			}
+
+			const updatedFilm = {
+				...films[targetFilmIndex],
+				seen: !films[targetFilmIndex].seen,
+			};
+
+			films[targetFilmIndex] = updatedFilm;
+
 			const response = await axios.post(
 				`${httpBase}user/toggle-film`,
 				{ filmId: id },
@@ -94,7 +106,7 @@
 				}
 			);
 
-			console.log('Toggle seen response:', response.data);
+			console.log('Toggle seen response:', response.data); // Log for debugging
 			return response.data;
 		} catch (error) {
 			console.error('Error toggling seen status:', error);
@@ -104,18 +116,17 @@
 	let skeletonArray = Array.from({ length: 100 });
 </script>
 
-<header class="text-center">
-	<h1 class="font-bold text-4xl px-3 pt-5">
-		Metacritic <span class="text-gray-400">|</span> Top 100 Films Checklist
-	</h1>
-	<p class="py-4">
-		A full-stack web app that only Dan can interact with. <span
-			class="font-bold">Films seen: {filmsSeen} / 100</span
-		>
-	</p>
-</header>
-
-<main class="flex flex-wrap justify-center mt-10 px-3 gap-x-0 gap-y-5 md:gap-5">
+<main
+	class="flex flex-wrap justify-center pt-10 px-3 gap-x-0 gap-y-5 md:gap-5 bg-gradient-to-r from-blue-100 to-pink-100"
+>
+	<header class="text-center">
+		<h1 class="font-bold text-4xl px-3 pb-5">
+			Metacritic <span class="text-gray-400">|</span> Top 100 Films Checklist
+		</h1>
+		<p class="py-4">
+			Films seen: {filmsSeen} / 100
+		</p>
+	</header>
 	{#if error}
 		<p class="text-red-600">{error}</p>
 	{:else if loading}

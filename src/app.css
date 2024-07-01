@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-	@apply bg-gradient-to-r from-blue-100 to-pink-100  h-screen;
+	@apply h-screen;
 }

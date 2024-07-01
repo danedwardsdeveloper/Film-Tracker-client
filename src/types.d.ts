@@ -7,5 +7,6 @@ export interface Film {
     description: string;
     seen: boolean;
     notes: string;
+    error: string | null;
 }
 
