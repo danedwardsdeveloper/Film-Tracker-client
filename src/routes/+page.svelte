@@ -3,7 +3,7 @@
 	import axios from 'axios';
 	import Cookies from 'js-cookie';
 
-	import { isLoggedIn, username } from '../lib/stores/userStore';
+	import { isLoggedIn } from '../lib/stores/userStore';
 
 	import { getHttpBase } from '../utils/httpBase.js';
 
@@ -23,8 +23,6 @@
 	const calculateFilmsSeen = () => {
 		filmsSeen = films.filter((film) => film.seen).length;
 	};
-
-	console.log($isLoggedIn);
 
 	const getFilms = async () => {
 		const token = Cookies.get('jwt');
