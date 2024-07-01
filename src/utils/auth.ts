@@ -2,13 +2,14 @@ import { writable } from 'svelte/store';
 import axios from 'axios';
 import { goto } from '$app/navigation';
 import { getHttpBase } from '../utils/httpBase';
+import Cookies from 'js-cookie';
 
 export const isLoggedIn = writable<boolean>(false);
 
 export const user = writable<string | null>(null);
 
 export function checkLoginStatus(): void {
-    const token = getCookie('jwt');
+    const token = Cookies.get('jwt');
     if (token) {
         isLoggedIn.set(true);
     } else {
@@ -26,7 +27,7 @@ export async function signin(email: string, password: string): Promise<void> {
         );
         if (response.status === 200) {
             console.log('Sign in successful', response.data);
-            setCookie('jwt', response.data.token, 7);
+            Cookies.set('jwt', response.data.token, { expires: 7, sameSite: 'None', secure: true });
             isLoggedIn.set(true);
             user.set(email)
             goto('/');
@@ -71,17 +72,17 @@ export function signOut(): void {
     isLoggedIn.set(false);
 }
 
-export function getCookie(name: string) {
-    const cookies = document.cookie.split(';');
-    for (const cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.trim().split('=');
-        console.log(`Cookie name: ${cookieName}, Value: ${decodeURIComponent(cookieValue || '')}`); // Log name and decoded value
-        if (cookieName === name) {
-            return decodeURIComponent(cookieValue || ''); // Handle empty values
-        }
-    }
-    return null;
-}
+// export function getCookie(name: string) {
+//     const cookies = document.cookie.split(';');
+//     for (const cookie of cookies) {
+//         const [cookieName, cookieValue] = cookie.trim().split('=');
+//         console.log(`Cookie name: ${cookieName}, Value: ${decodeURIComponent(cookieValue || '')}`);
+//         if (cookieName === name) {
+//             return decodeURIComponent(cookieValue || '');
+//         }
+//     }
+//     return null;
+// }
 
 function setCookie(name: string, value: string, days: number, sameSite: 'Strict' | 'Lax' = 'Lax') {
     const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();

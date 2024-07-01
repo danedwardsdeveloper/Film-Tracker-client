@@ -1,13 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import axios from 'axios';
+	import Cookies from 'js-cookie';
 
-	import {
-		isLoggedIn,
-		checkLoginStatus,
-		signOut,
-		getCookie,
-	} from '$utils/auth';
+	import { isLoggedIn, checkLoginStatus, signOut } from '$utils/auth';
 
 	import { getHttpBase } from '../utils/httpBase.js';
 
@@ -56,7 +52,7 @@
 				return;
 			}
 
-			const token = getCookie('jwt');
+			const token = Cookies.get('jwt');
 
 			if (!token) {
 				console.warn('Error. No token provided.');
