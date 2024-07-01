@@ -2,7 +2,16 @@
 	import { onMount } from 'svelte';
 	import axios from 'axios';
 
+	import {
+		isLoggedIn,
+		checkLoginStatus,
+		signOut,
+		getCookie,
+	} from '$utils/auth';
+
 	import { getHttpBase } from '../utils/httpBase.js';
+
+	$: loggedIn = $isLoggedIn;
 
 	const httpBase = getHttpBase();
 	console.log(`HTTP base: ${httpBase}`);
@@ -42,11 +51,29 @@
 
 	const toggleSeen = async (id: string) => {
 		try {
+			if (!isLoggedIn) {
+				console.warn('Error: not logged in.');
+				return;
+			}
+
+			const token = getCookie('jwt');
+
+			if (!token) {
+				console.warn('Error. No token provided.');
+				return;
+			}
+
 			const response = await axios.post(
-				`https://metacritic-top-100-api.netlify.app/films//films/${id}/toggle`
+				`${httpBase}user/toggle-film`,
+				{ filmId: id },
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			);
-			films = films.map((film) => (film._id === id ? response.data : film));
-			calculateFilmsSeen();
+
+			return response.data;
 		} catch (error) {
 			console.error('Error toggling seen status:', error);
 		}

@@ -5,6 +5,8 @@ import { getHttpBase } from '../utils/httpBase';
 
 export const isLoggedIn = writable<boolean>(false);
 
+export const user = writable<string | null>(null);
+
 export function checkLoginStatus(): void {
     const token = getCookie('jwt');
     if (token) {
@@ -26,6 +28,7 @@ export async function signin(email: string, password: string): Promise<void> {
             console.log('Sign in successful', response.data);
             setCookie('jwt', response.data.token, 7);
             isLoggedIn.set(true);
+            user.set(email)
             goto('/');
         } else {
             console.error('Sign in failed', response.statusText);
@@ -68,12 +71,13 @@ export function signOut(): void {
     isLoggedIn.set(false);
 }
 
-function getCookie(name: string) {
+export function getCookie(name: string) {
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
         const [cookieName, cookieValue] = cookie.trim().split('=');
+        console.log(`Cookie name: ${cookieName}, Value: ${decodeURIComponent(cookieValue || '')}`); // Log name and decoded value
         if (cookieName === name) {
-            return cookieValue;
+            return decodeURIComponent(cookieValue || ''); // Handle empty values
         }
     }
     return null;
